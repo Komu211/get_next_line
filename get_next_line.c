@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:09:22 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/17 17:36:13 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/17 18:59:15 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@ static char	*retrieve_next_line(char *static_buffer)
 {
 	int		len;
 	char	*r_buffer;
-	int		i;
 	int		nl_index;
 
-	i = 0;
 	nl_index = ft_strchr(static_buffer, '\n');
 	if (nl_index == -1)
 		len = ft_strlen(static_buffer);
@@ -40,7 +38,26 @@ static char	*retrieve_next_line(char *static_buffer)
 
 static char	*load_next_line(int fd, char *static_buffer)
 {
-	return ;
+	char		*tmp;
+	char static	*new_buffer;
+	int			status;
+
+	tmp = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!tmp)
+		return (NULL);
+	status = read(fd, tmp, BUFFER_SIZE);
+	if (status <= 0)
+	{
+		free(tmp);
+		return (static_buffer);
+	}
+	tmp[status] = '\0';
+	new_buffer = ft_strjoin(static_buffer, tmp);
+	if (!new_buffer)
+		return (NULL);
+	free(tmp);
+	free(static_buffer);
+	return (new_buffer);
 }
 
 char	*get_next_line(int fd)
@@ -51,14 +68,9 @@ char	*get_next_line(int fd)
 		static_buffer = malloc(BUFFER_SIZE + 1);
 	if (!static_buffer)
 		return (NULL);
-	if (ft_strchr(static_buffer, '\n') != -1)
-		return (retrieve_next_line(static_buffer));
-	else
-	{
-		while (ft_strchr(static_buffer, '\n') == -1 && ft_strchr(static_buffer,
-				'\0') == -1)
-			static_buffer = load_next_line(fd, static_buffer);
-	}
+	while (ft_strchr(static_buffer, '\n') == -1 && ft_strchr(static_buffer,
+			'\0') == -1)
+		static_buffer = load_next_line(fd, static_buffer);
 	while (ft_strchr(static_buffer, '\n') == -1 && ft_strchr(static_buffer,
 			'\0') == -1)
 		static_buffer = retrieve_next_line(static_buffer);
@@ -75,8 +87,6 @@ int	main(void)
 
 	static_buffer = malloc(100000);
 	fd = open("text.txt", O_RDONLY);
-	read(fd, static_buffer, 100000);
-	return_buffer = retrieve_next_line(static_buffer);
-	printf("%s", static_buffer);
+	printf("%s", get_next_line(fd));
 	return (0);
 }

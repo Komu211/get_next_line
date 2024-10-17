@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:09:22 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/17 18:59:15 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/17 19:29:13 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	*retrieve_next_line(char *static_buffer)
 	return (r_buffer);
 }
 
-static char	*load_next_line(int fd, char *static_buffer)
+static char	*load_next_set(int fd, char *static_buffer)
 {
 	char		*tmp;
 	char static	*new_buffer;
@@ -87,6 +87,8 @@ int	main(void)
 
 	static_buffer = malloc(100000);
 	fd = open("text.txt", O_RDONLY);
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
 	return (0);
 }

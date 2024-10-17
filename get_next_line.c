@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:09:22 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/17 15:49:40 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/17 17:36:13 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,27 +38,34 @@ static char	*retrieve_next_line(char *static_buffer)
 	return (r_buffer);
 }
 
-// char	*get_next_line(int fd)
-// {
-// 	static char	*static_buffer;
-// 	char		*return_buffer;
+static char	*load_next_line(int fd, char *static_buffer)
+{
+	return ;
+}
 
-// 	if (!static_buffer)
-// 		static_buffer = malloc(BUFFER_SIZE + 1);
-// 	if (!static_buffer)
-// 		return (NULL);
-// 	if (ft_strrchr(static_buffer, '\n'))
-// 		return (return_next_line(static_buffer, return_buffer), return_buffer);
-// 	else
-// 	{
-// 		while (!ft_strchr(static_buffer, '\n') || ft_strchr(static_buffer,
-// 				'\n') != -1)
-// 			load_next_line(fd, static_buffer);
-// 	}
-// 	if (ft_strchr(static_buffer, '\n'))
-// 		retrieve_next_line(static_buffer, return_buffer);
-// 	return ("");
-// }
+char	*get_next_line(int fd)
+{
+	static char	*static_buffer;
+
+	if (!static_buffer)
+		static_buffer = malloc(BUFFER_SIZE + 1);
+	if (!static_buffer)
+		return (NULL);
+	if (ft_strchr(static_buffer, '\n') != -1)
+		return (retrieve_next_line(static_buffer));
+	else
+	{
+		while (ft_strchr(static_buffer, '\n') == -1 && ft_strchr(static_buffer,
+				'\0') == -1)
+			static_buffer = load_next_line(fd, static_buffer);
+	}
+	while (ft_strchr(static_buffer, '\n') == -1 && ft_strchr(static_buffer,
+			'\0') == -1)
+		static_buffer = retrieve_next_line(static_buffer);
+	if (ft_strchr(static_buffer, '\n') == -1)
+		return (static_buffer);
+	return (NULL);
+}
 
 int	main(void)
 {

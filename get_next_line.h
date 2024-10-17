@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 14:40:53 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/16 15:13:09 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/17 14:37:26 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-char	*get_next_line(int fd);
-void	*ft_calloc(size_t count, size_t size);
-int		get_linesep_pos(char *c);
+int		ft_strchr(const char *s, int c);
+void	ft_strlcpy(char *dst, const char *src, size_t size);
+size_t	ft_strlen(const char *s);
 
 #endif

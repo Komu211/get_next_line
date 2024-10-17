@@ -6,48 +6,48 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/16 12:20:38 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/16 15:29:58 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:39:19 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	get_linesep_pos(char *c)
+int	ft_strchr(const char *s, int c)
 {
 	int	i;
 
 	i = 0;
-	while (c[i] != '\n')
-		i++;
-	if (c[i] != '\n')
-		return (-1);
-	return (i);
-}
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	void	*ptr;
-
-	ptr = malloc(count * size * sizeof(char));
-	if (!ptr)
+	while (s[i] != '\0')
 	{
-		errno = ENOMEM;
-		return (NULL);
+		if (s[i] == (char)c)
+			return (i);
+		i++;
 	}
-	ft_bzero(ptr, size * count);
-	return (ptr);
+	if (s[i] == (char)c)
+		return (i);
+	return (-1);
 }
 
-void	ft_bzero(void *s, size_t n)
+void	ft_strlcpy(char *dst, const char *src, size_t size)
 {
-	unsigned char	*ptr;
-	size_t			i;
+	size_t	i;
 
 	i = 0;
-	ptr = s;
-	while (i < n)
+	while (i < size - 1 && src[i] != '\0')
 	{
-		ptr[i] = (unsigned char)0;
+		dst[i] = src[i];
 		i++;
 	}
+	if (size != 0)
+		dst[i] = '\0';
+}
+
+size_t	ft_strlen(const char *s)
+{
+	int i;
+
+	i = 0;
+	while (s[i] != '\0')
+		i++;
+	return (i);
 }

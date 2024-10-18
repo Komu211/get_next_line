@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:09:22 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/17 19:29:13 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/18 18:05:46 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ static char	*load_next_set(int fd, char *static_buffer)
 	if (status <= 0)
 	{
 		free(tmp);
+		if (status == 0 && static_buffer[0] == '\0')
+		{
+			free(static_buffer);
+			return (NULL);
+		}
 		return (static_buffer);
 	}
 	tmp[status] = '\0';
@@ -68,27 +73,30 @@ char	*get_next_line(int fd)
 		static_buffer = malloc(BUFFER_SIZE + 1);
 	if (!static_buffer)
 		return (NULL);
-	while (ft_strchr(static_buffer, '\n') == -1 && ft_strchr(static_buffer,
-			'\0') == -1)
-		static_buffer = load_next_line(fd, static_buffer);
-	while (ft_strchr(static_buffer, '\n') == -1 && ft_strchr(static_buffer,
-			'\0') == -1)
-		static_buffer = retrieve_next_line(static_buffer);
+	while (ft_strchr(static_buffer, '\n') == -1)
+	{
+		static_buffer = load_next_set(fd, static_buffer);
+		if (!static_buffer)
+			return (NULL);
+		if (ft_strlen(static_buffer) < BUFFER_SIZE)
+			return (retrieve_next_line(static_buffer));
+	}
 	if (ft_strchr(static_buffer, '\n') == -1)
-		return (static_buffer);
-	return (NULL);
+		return (retrieve_next_line(static_buffer));
+	return (retrieve_next_line(static_buffer));
 }
 
-int	main(void)
-{
-	int		fd;
-	char	*static_buffer;
-	char	*return_buffer;
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*static_buffer;
 
-	static_buffer = malloc(100000);
-	fd = open("text.txt", O_RDONLY);
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	return (0);
-}
+// 	static_buffer = malloc(100000);
+// 	fd = open("text.txt", O_RDONLY);
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	return (0);
+// }

@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:09:22 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/19 13:30:58 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/19 15:26:03 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,10 @@ static char	*load_next_set(int fd, char *static_buffer, int *status)
 	if (*status <= 0)
 	{
 		free(tmp);
-		if (*status == -1 && static_buffer[0] == '\0')
+		if (*status < 0 || static_buffer[0] == '\0')
 			return (free(static_buffer), NULL);
-	}
-	if (*status == 0)
 		return (static_buffer);
+	}
 	tmp[*status] = '\0';
 	new_buffer = ft_strjoin(static_buffer, tmp);
 	if (!new_buffer)
@@ -81,7 +80,7 @@ char	*get_next_line(int fd)
 	while (ft_strchr(static_buffer, '\n') == -1 && status > 0)
 	{
 		static_buffer = load_next_set(fd, static_buffer, &status);
-		if (!static_buffer || status == -1)
+		if (!static_buffer || status < 0)
 			return (NULL);
 	}
 	if (static_buffer[0] == '\0')

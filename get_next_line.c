@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:09:22 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/18 18:05:46 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/19 12:45:30 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,27 +36,24 @@ static char	*retrieve_next_line(char *static_buffer)
 	return (r_buffer);
 }
 
-static char	*load_next_set(int fd, char *static_buffer)
+static char	*load_next_set(int fd, char *static_buffer, int *status)
 {
-	char		*tmp;
-	char static	*new_buffer;
-	int			status;
+	char	*tmp;
+	char	*new_buffer;
 
 	tmp = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!tmp)
 		return (NULL);
-	status = read(fd, tmp, BUFFER_SIZE);
-	if (status <= 0)
+	*status = read(fd, tmp, BUFFER_SIZE);
+	if (*status <= 0)
 	{
 		free(tmp);
-		if (status == 0 && static_buffer[0] == '\0')
-		{
-			free(static_buffer);
-			return (NULL);
-		}
-		return (static_buffer);
+		if (*status == 0 && static_buffer[0] == '\0')
+			return (free(static_buffer), NULL);
 	}
-	tmp[status] = '\0';
+	if (*status == 0)
+		return (free(tmp), static_buffer);
+	tmp[*status] = '\0';
 	new_buffer = ft_strjoin(static_buffer, tmp);
 	if (!new_buffer)
 		return (NULL);
@@ -68,21 +65,24 @@ static char	*load_next_set(int fd, char *static_buffer)
 char	*get_next_line(int fd)
 {
 	static char	*static_buffer;
+	int			status;
 
+	status = 1;
 	if (!static_buffer)
-		static_buffer = malloc(BUFFER_SIZE + 1);
-	if (!static_buffer)
-		return (NULL);
-	while (ft_strchr(static_buffer, '\n') == -1)
 	{
-		static_buffer = load_next_set(fd, static_buffer);
+		static_buffer = malloc(1);
 		if (!static_buffer)
 			return (NULL);
-		if (ft_strlen(static_buffer) < BUFFER_SIZE)
+		static_buffer[0] = '\0';
+	}
+	while (ft_strchr(static_buffer, '\n') == -1)
+	{
+		static_buffer = load_next_set(fd, static_buffer, &status);
+		if (!static_buffer || status == -1)
+			return (NULL);
+		if (status == 0)
 			return (retrieve_next_line(static_buffer));
 	}
-	if (ft_strchr(static_buffer, '\n') == -1)
-		return (retrieve_next_line(static_buffer));
 	return (retrieve_next_line(static_buffer));
 }
 

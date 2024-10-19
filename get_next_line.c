@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/15 15:09:22 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/19 15:26:03 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/19 16:28:05 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ static char	*load_next_set(int fd, char *static_buffer, int *status)
 
 	tmp = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!tmp)
+	{
+		free(static_buffer);
 		return (NULL);
+	}
 	*status = read(fd, tmp, BUFFER_SIZE);
 	if (*status <= 0)
 	{
@@ -54,11 +57,30 @@ static char	*load_next_set(int fd, char *static_buffer, int *status)
 	}
 	tmp[*status] = '\0';
 	new_buffer = ft_strjoin(static_buffer, tmp);
-	if (!new_buffer)
-		return (free(static_buffer), NULL);
 	free(tmp);
 	free(static_buffer);
+	if (!new_buffer)
+		return (NULL);
 	return (new_buffer);
+}
+
+static char	*retrieve_and_cleanup(char **static_buffer)
+{
+	char	*line;
+
+	if ((*static_buffer)[0] == '\0')
+	{
+		free(*static_buffer);
+		*static_buffer = NULL;
+		return (NULL);
+	}
+	line = retrieve_next_line(*static_buffer);
+	if (!line)
+	{
+		free(*static_buffer);
+		*static_buffer = NULL;
+	}
+	return (line);
 }
 
 char	*get_next_line(int fd)
@@ -83,32 +105,6 @@ char	*get_next_line(int fd)
 		if (!static_buffer || status < 0)
 			return (NULL);
 	}
-	if (static_buffer[0] == '\0')
-	{
-		free(static_buffer);
-		static_buffer = NULL;
-		return (NULL);
-	}
-	line = retrieve_next_line(static_buffer);
-	if (!line)
-	{
-		free(static_buffer);
-		static_buffer = NULL;
-	}
+	line = retrieve_and_cleanup(&static_buffer);
 	return (line);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*static_buffer;
-
-// 	static_buffer = malloc(100000);
-// 	fd = open("text.txt", O_RDONLY);
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	return (0);
-// }

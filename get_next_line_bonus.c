@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 17:04:49 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/21 13:42:19 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:18:04 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,29 @@ static char	*retrieve_and_cleanup(char **static_buffer)
 	return (line);
 }
 
-// static char	*fd_get_buffer(int fd)
-// {
-// 	char	*r_buffer;
-// }
+static void	*fd_lst_rm(int fd, t_fd_list **node)
+{
+	t_fd_list	*prev;
+	t_fd_list	*curr;
+
+	curr = *node;
+	prev = NULL;
+	while (curr)
+	{
+		if (curr->fd == fd)
+		{
+			if (prev != NULL)
+				prev->next = curr->next;
+			else
+				*node = curr->next;
+			free(curr->buffer);
+			free(curr);
+			return ;
+		}
+		prev = curr;
+		curr = curr->next;
+	}
+}
 
 char	*get_next_line(int fd)
 {

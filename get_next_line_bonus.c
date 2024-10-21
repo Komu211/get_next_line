@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 17:04:49 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/21 17:08:39 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/21 18:06:30 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static char	*retrieve_and_cleanup(char **static_buffer)
 	return (line);
 }
 
-static void	fd_lst_rm(int fd, t_fd_list **node)
+static void	fd_lst_rm(int fd, t_fd_list **node, int all)
 {
 	t_fd_list	*prev;
 	t_fd_list	*curr;
@@ -91,7 +91,7 @@ static void	fd_lst_rm(int fd, t_fd_list **node)
 	prev = NULL;
 	while (curr)
 	{
-		if (curr->fd == fd)
+		if (curr->fd == fd || all == 1)
 		{
 			if (prev != NULL)
 				prev->next = curr->next;
@@ -99,6 +99,8 @@ static void	fd_lst_rm(int fd, t_fd_list **node)
 				*node = curr->next;
 			free(curr->buffer);
 			free(curr);
+			if (all && (*node)->next)
+				fd_lst_rm(fd, &((*node)->next), all);
 			return ;
 		}
 		prev = curr;
@@ -121,14 +123,16 @@ char	*get_next_line(int fd)
 		curr_fd = curr_fd->next;
 	if (curr_fd == NULL)
 		curr_fd = ft_lst_add_new(fd, &node);
+	if (!curr_fd)
+		return (fd_lst_rm(fd, &node, 1), NULL);
 	while (ft_strchr(curr_fd->buffer, '\n') == -1 && status > 0)
 	{
 		curr_fd->buffer = load_next_set(fd, curr_fd->buffer, &status);
 		if (!curr_fd->buffer || status < 0)
-			return (fd_lst_rm(fd, &node), NULL);
+			return (fd_lst_rm(fd, &node, 0), NULL);
 	}
 	line = retrieve_and_cleanup(&curr_fd->buffer);
 	if (!line || !curr_fd->buffer)
-		fd_lst_rm(fd, &node);
+		fd_lst_rm(fd, &node, 0);
 	return (line);
 }

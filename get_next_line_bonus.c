@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 17:04:49 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/21 15:18:04 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:19:09 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static char	*retrieve_and_cleanup(char **static_buffer)
 	return (line);
 }
 
-static void	*fd_lst_rm(int fd, t_fd_list **node)
+static void	fd_lst_rm(int fd, t_fd_list **node)
 {
 	t_fd_list	*prev;
 	t_fd_list	*curr;

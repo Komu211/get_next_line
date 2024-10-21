@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 17:06:44 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/21 13:36:17 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:47:17 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	jstr[i] = '\0';
 	return (jstr);
 }
+
 t_fd_list	*ft_lst_add_new(int fd, t_fd_list **node)
 {
 	t_fd_list	*new_lst;

@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 17:04:49 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/21 15:19:09 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:08:39 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,10 @@ char	*get_next_line(int fd)
 	{
 		curr_fd->buffer = load_next_set(fd, curr_fd->buffer, &status);
 		if (!curr_fd->buffer || status < 0)
-			return (NULL);
+			return (fd_lst_rm(fd, &node), NULL);
 	}
 	line = retrieve_and_cleanup(&curr_fd->buffer);
+	if (!line || !curr_fd->buffer)
+		fd_lst_rm(fd, &node);
 	return (line);
 }

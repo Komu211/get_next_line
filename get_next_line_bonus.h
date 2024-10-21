@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 17:04:57 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/19 17:53:43 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:36:47 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ int						ft_strchr(const char *s, int c);
 void					ft_strlcpy(char *dst, const char *src, size_t size);
 size_t					ft_strlen(const char *s);
 char					*ft_strjoin(char const *s1, char const *s2);
-t_fd_list				*ft_lstnew(int fd);
+t_fd_list				*ft_lst_add_new(int fd, t_fd_list **node);
 
 #endif

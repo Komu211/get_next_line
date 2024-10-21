@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 17:04:49 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/21 18:06:30 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/21 18:47:32 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,10 @@ static void	fd_lst_rm(int fd, t_fd_list **node, int all)
 				prev->next = curr->next;
 			else
 				*node = curr->next;
-			free(curr->buffer);
-			free(curr);
 			if (all && (*node)->next)
-				fd_lst_rm(fd, &((*node)->next), all);
+				fd_lst_rm(fd, &((curr)->next), all);
+			free(curr->buffer);	
+			free(curr);
 			return ;
 		}
 		prev = curr;

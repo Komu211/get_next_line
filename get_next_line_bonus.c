@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 17:04:49 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/19 18:07:09 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:42:19 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static char	*retrieve_and_cleanup(char **static_buffer)
 
 char	*get_next_line(int fd)
 {
-	static t_fd_list	*node;
+	static t_fd_list	*node = NULL;
 	char				*line;
 	int					status;
 	t_fd_list			*curr_fd;
@@ -97,13 +97,11 @@ char	*get_next_line(int fd)
 	status = 1;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!node)
-	{
-		node = ft_lstnew(fd);
-		if (!node)
-			return (NULL);
-		node->buffer[0] = '\0';
-	}
+	curr_fd = node;
+	while (curr_fd != NULL && curr_fd->fd != fd)
+		curr_fd = curr_fd->next;
+	if (curr_fd == NULL)
+		curr_fd = ft_lst_add_new(fd, &node);
 	while (ft_strchr(curr_fd->buffer, '\n') == -1 && status > 0)
 	{
 		curr_fd->buffer = load_next_set(fd, curr_fd->buffer, &status);

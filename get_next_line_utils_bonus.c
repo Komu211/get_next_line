@@ -6,7 +6,7 @@
 /*   By: kmuhlbau <kmuhlbau@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 17:06:44 by kmuhlbau          #+#    #+#             */
-/*   Updated: 2024/10/19 17:55:19 by kmuhlbau         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:36:17 by kmuhlbau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,20 +76,22 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	jstr[i] = '\0';
 	return (jstr);
 }
-t_fd_list	*ft_lstnew(int fd)
+t_fd_list	*ft_lst_add_new(int fd, t_fd_list **node)
 {
 	t_fd_list	*new_lst;
 
 	new_lst = malloc(sizeof(t_fd_list));
 	if (!new_lst)
 		return (NULL);
-	new_lst->next = NULL;
 	new_lst->buffer = malloc(BUFFER_SIZE + 1);
 	if (!new_lst->buffer)
 	{
 		free(new_lst);
 		return (NULL);
 	}
+	new_lst->buffer[0] = '\0';
 	new_lst->fd = fd;
+	new_lst->next = *node;
+	*node = new_lst;
 	return (new_lst);
 }
